@@ -1,0 +1,47 @@
+argocd-apps:
+  applications:
+
+    cert-manager-clusterissuer:
+      namespace: argo-cd
+      project: default
+      source:
+        repoURL: https://github.com/Illumidragui/devsecops-helm.git
+        targetRevision: HEAD
+        path: cert-manager-clusterissuer
+      destination:
+        server: https://kubernetes.default.svc
+        namespace: cert-manager
+      syncPolicy:
+        automated:
+          prune: true
+          selfHeal: true
+
+    tailscale-operator:
+      namespace: argo-cd
+      project: default
+      source:
+        repoURL: https://github.com/Illumidragui/devsecops-helm.git
+        targetRevision: HEAD
+        path: tailscale-operator
+      destination:
+        server: https://kubernetes.default.svc
+        namespace: tailscale-operator
+      syncPolicy:
+        automated:
+          prune: true
+          selfHeal: true
+
+    syesite:
+      namespace: argo-cd
+      project: default
+      source:
+        repoURL: https://github.com/Illumidragui/devsecops-helm.git
+        targetRevision: HEAD
+        path: syesite-chart
+      destination:
+        server: https://kubernetes.default.svc
+        namespace: syesite
+      syncPolicy:
+        automated:
+          prune: true
+          selfHeal: true
