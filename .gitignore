@@ -1,0 +1,26 @@
+# Ignore Helm dependency builds
+**/charts/
+
+# Ignore Helm release history
+*.tgz
+
+# Ignore generated files and folders from Helm
+.crds/
+.helm/
+helmfile.*
+manifest.yaml
+release.yaml
+output/
+
+# Ignore Helm's value files that might contain sensitive information
+secrets.yaml
+values-secret.yaml
+values-prod.yaml
+values-dev.yaml
+*.local.yaml
+*.secret.yaml
+
+# Ignore any custom temp files used in Helm testing or deployment
+tmp/
+temp/
+test-output/
