@@ -1,0 +1,29 @@
+name: CI Fast — dev push
+
+# Secret scan + Helm lint on every push to dev.
+# add-argo-repo: true resolves the argocd-apps chart dependency.
+
+on:
+  push:
+    branches: [dev]
+
+permissions:
+  contents: read
+
+jobs:
+  gitleaks:
+    uses: Illumidragui/.github/.github/workflows/_reusable.code-security.yml@main
+    with:
+      language: node
+      run-tests: false
+      run-sonarcloud: false
+      run-snyk: false
+    secrets: inherit
+
+  helm-lint:
+    needs: gitleaks
+    uses: Illumidragui/.github/.github/workflows/_reusable.ci-lint-helm.yml@main
+    with:
+      chart-dirs: .
+      add-argo-repo: true
+    secrets: inherit
