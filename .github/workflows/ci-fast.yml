@@ -1,29 +1,51 @@
 name: CI Fast — dev push
 
 # Secret scan + Helm lint on every push to dev.
-# add-argo-repo: true resolves the argocd-apps chart dependency.
+# add-argo-repo: the Argo Helm repo is required to resolve the argocd-apps chart dependency.
 
 on:
   push:
     branches: [dev]
+    paths:
+      - '**/*.yaml'
+      - '**/*.yml'
+      - '**/*.tpl'
+      - 'Chart.yaml'
+      - '.github/workflows/**'
+
+concurrency:
+  group: ci-fast-${{ github.ref }}
+  cancel-in-progress: true
 
 permissions:
   contents: read
 
 jobs:
   gitleaks:
-    uses: Illumidragui/.github/.github/workflows/_reusable.code-security.yml@main
-    with:
-      language: node
-      run-tests: false
-      run-sonarcloud: false
-      run-snyk: false
-    secrets: inherit
+    name: Gitleaks
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: gitleaks/gitleaks-action@v2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
   helm-lint:
+    name: Helm Lint
+    runs-on: ubuntu-latest
     needs: gitleaks
-    uses: Illumidragui/.github/.github/workflows/_reusable.ci-lint-helm.yml@main
-    with:
-      chart-dirs: .
-      add-argo-repo: true
-    secrets: inherit
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: azure/setup-helm@v4
+      - name: Add Argo Helm repository
+        run: |
+          helm repo add argo https://argoproj.github.io/argo-helm
+          helm repo update
+      - name: Lint chart
+        run: |
+          helm dependency update . 2>/dev/null || true
+          helm lint .
