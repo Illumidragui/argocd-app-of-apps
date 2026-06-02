@@ -1,7 +1,8 @@
-apiVersion: v1
+apiVersion: v2
 name: aws-argocd-appofapps
-description: A Helm chart that extends argocd
-version: 0.1.0
+description: Root App of Apps chart — bootstraps all ArgoCD applications
+type: application
+version: 0.2.0
 
 dependencies:
   - name: argocd-apps
