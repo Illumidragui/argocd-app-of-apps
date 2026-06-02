@@ -1,0 +1,30 @@
+name: CI PR — Quality Gate
+
+# Gitleaks + helm lint on every PR to main.
+# add-argo-repo: true resolves the argocd-apps chart dependency.
+
+on:
+  pull_request:
+    branches: [main]
+    types: [opened, synchronize, reopened]
+
+permissions:
+  contents: read
+
+jobs:
+  gitleaks:
+    uses: Illumidragui/.github/.github/workflows/_reusable.code-security.yml@main
+    with:
+      language: node
+      run-tests: false
+      run-sonarcloud: false
+      run-snyk: false
+    secrets: inherit
+
+  helm-validate:
+    needs: gitleaks
+    uses: Illumidragui/.github/.github/workflows/_reusable.ci-lint-helm.yml@main
+    with:
+      chart-dirs: .
+      add-argo-repo: true
+    secrets: inherit
