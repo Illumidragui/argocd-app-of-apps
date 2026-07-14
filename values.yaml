@@ -81,3 +81,20 @@ argocd-apps:
           selfHeal: true
         syncOptions:
           - CreateNamespace=true
+
+    kuberflow:
+      namespace: argo-cd
+      project: default
+      source:
+        repoURL: https://github.com/Illumidragui/devsecops-helm.git
+        targetRevision: HEAD
+        path: kuberflow
+      destination:
+        server: https://kubernetes.default.svc
+        namespace: kuberflow
+      syncPolicy:
+        automated:
+          prune: true
+          selfHeal: true
+        syncOptions:
+          - CreateNamespace=true
