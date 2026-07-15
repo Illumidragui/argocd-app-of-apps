@@ -17,7 +17,7 @@ bootstrap-argocd.sh
                     ├── ingress-nginx               → devsecops-helm/ingress-nginx
                     ├── tailscale-operator          → devsecops-helm/tailscale-operator
                     ├── syesite                     → devsecops-helm/syesite-chart
-                    └── hello-world                 → devsecops-helm/hello-world
+                    └── kuberflow                   → devsecops-helm/kuberflow
 ```
 
 All applications are configured with `automated: prune + selfHeal`.

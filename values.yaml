@@ -65,16 +65,16 @@ argocd-apps:
         syncOptions:
           - CreateNamespace=true
 
-    hello-world:
+    kuberflow:
       namespace: argo-cd
       project: default
       source:
         repoURL: https://github.com/Illumidragui/devsecops-helm.git
         targetRevision: HEAD
-        path: hello-world
+        path: kuberflow
       destination:
         server: https://kubernetes.default.svc
-        namespace: hello-world
+        namespace: kuberflow
       syncPolicy:
         automated:
           prune: true
